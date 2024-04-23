@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aberto Token Verification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .verification-container {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: auto;
+        }
+
+        .verification-container h2 {
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .input-group input[type="text"] {
+            width: 90%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .input-group button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .error-message {
+            color: red;
+            margin-top: 10px;
+        }
+
+        /* Style for textarea */
+        textarea {
+            width: 90%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: none;
+            margin-bottom: 10px;
+        }
+
+        /* Style for paragraphs */
+        .verification-container p {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            margin-bottom: 10px;
+        }
+
+        .option {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #57a3f4;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: left;
+        }
+
+        .option:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="verification-container">
+        <h2>Aberto Token Verification</h2>
+        <p>Here's the challenge data to sign the challenge:</p>
+        <textarea readonly rows="4" cols="40">{{ challenge_data }}</textarea>
+        <button class="copy-button" onclick="copyToClipboard()">Copy to Clipboard</button><br>
+        <p>Use the below link to sign the challenge and paste back the token:<br>
+            <a href="https://swims.cisco.com/aberto/web/sign" target="_blank">https://swims.cisco.com/aberto/web/sign</a></p>
+        <form id="tokenForm" method="POST">
+            <div class="input-group">
+                <label for="token">Enter Token:</label>
+                <input type="text" id="token" name="token" required>
+            </div>
+            <button type="submit" class="option">Submit Token</button>
+            {% if message %}
+            <p class="error-message">{{ message }}</p>
+            {% endif %}
+        </form>
+    </div>
+
+    <script>
+        function copyToClipboard() {
+            var textarea = document.querySelector('textarea');
+            textarea.select();
+            document.execCommand('copy');
+            alert('Copied to clipboard');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Result</title>
+<style>
+  
+
+  textarea {
+    width: 100%;
+    height: 400px; /* Adjust height as needed */
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    resize: vertical; /* Allow vertical resizing */
+  }
+
+  #scrollable {
+    overflow-y: auto; /* Enable vertical scrollbar */
+  }
+
+  .navbar {
+    background-color: #57a3f4;
+    overflow: hidden;
+    width:100%;
+    font-family: Arial, sans-serif;
+  }
+
+  .navbar a {
+    float: right;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 20px;
+    text-decoration: none;
+  }
+
+  .navbar a:hover {
+    background-color: #0056b3;
+  }
+
+  .left-pane {
+    position: fixed;
+    top: 0;
+    left: -250px; /* Initially hidden */
+    width: 250px;
+    height: 100%;
+    background-color: #57a3f4;
+    overflow-y: auto;
+    transition: left 0.3s ease;
+    z-index: 1000;
+  }
+
+  .left-pane a {
+    display: block;
+    color: white;
+    padding: 15px;
+    text-decoration: none;
+  }
+
+  .left-pane a:hover {
+    background-color: #0056b3;
+  }
+  
+  .menu-icon {
+    display: block; /* Change display property to block to make it visible */
+    position: fixed;
+    top: 13px;
+    left: 20px;
+    cursor: pointer;
+    z-index: 1001;
+  }
+
+  .menu-icon div {
+    width: 35px;
+    height: 5px;
+    background-color: white;
+    margin: 5px 0;
+    transition: 0.4s;
+  }
+
+  /* Add styles for the overlay */
+  .overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+  }
+</style>
+</head>
+<body>
+
+
+  <!-- Three-line menu icon -->
+  <div class="menu-icon" id="menu-icon">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+
+  <!-- Overlay for the left pane -->
+  <div class="overlay" id="overlay"></div>
+
+  <!-- Left pane -->
+  <div class="left-pane" id="left-pane">
+    <br><br><br><br>
+    <a href="/home">Home</a>
+    <a href="/SDA_digger">SDA Digger</a>
+    <a href="/DNAC_ISE">DNAC ISE</a>
+    <a href="/index">DNA Analyzer</a>
+    <a href="/transfer_files">Transfer files</a>
+  </div>
+
+  <div class="navbar">
+    <a href="/service">Change Device</a>
+  </div>
+
+  
+
+<h1>Result</h1>
+
+<div id="scrollable">
+  <textarea readonly id="outputTextarea">{{ output }}</textarea>
+</div>
+{% if msg %}
+<p>{{msg}}</p>
+{%endif%}
+
+
+<script>
+  function toggleMenu() {
+  const leftPane = document.getElementById('left-pane');
+  const overlay = document.getElementById('overlay');
+
+  if (leftPane.style.left === '-250px') {
+    leftPane.style.left = '0';
+    overlay.style.display = 'block';
+  } else {
+    leftPane.style.left = '-250px';
+    overlay.style.display = 'none';
+  }
+}
+
+// Event listener for the menu icon click
+document.getElementById('menu-icon').addEventListener('click', toggleMenu);
+</script>
+</body>
+</html>

@@ -1,0 +1,125 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Service Page</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  .service-container {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width:auto; 
+  }
+
+  .service-container h2 {
+    margin-bottom: 20px;
+  }
+
+  .input-group {
+    margin-bottom: 15px;
+  }
+
+  .input-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+
+  .input-group input[type="text"] {
+    width: 91%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  .input-group button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .error-message {
+    color: red;
+    margin-top: 10px;
+  }
+
+  .option {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #57a3f4;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: left;
+  }
+
+  .option:hover {
+    background-color: #0056b3;
+  }
+
+  select{
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+  }
+</style>
+</head>
+<body>
+
+  <div class="service-container">
+    <h2>Service Connection</h2>
+    {% if not devices %}
+    <form id="serviceForm" method="POST">
+      <div class="input-group">
+        <label for="serviceid">Service ID:</label>
+        <input type="text" id="serviceid" name="serviceid" required>
+      </div>
+      <button type="submit" class="option">Establish Connection</button>
+    </form>
+    {% endif %}
+    {% if devices %}
+    <form id="deviceForm" method="POST" action="/process_device">
+      <div class="input-group">
+        <label for="device">Select Device:</label>
+        <select id="device" name="device">
+          {% for device in devices %}
+          <option value="{{ device }}">{{ device }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <button type="button" class="option" onclick="submitDeviceForm()">Submit Device</button>
+    </form>
+    {% endif %}
+    {% if message %}
+    <p class="error-message">{{ message }}</p>
+    {% endif %}
+  </div>
+  
+  <script>
+  function submitDeviceForm() {
+    document.getElementById("deviceForm").submit();
+  }
+  </script>
+  
+  </body>
+  </html>

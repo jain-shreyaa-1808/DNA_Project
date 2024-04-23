@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DNA Analyzer</title>
+<style>
+  .content {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  .menu {
+    display: none;
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: auto;
+  }
+
+  .menu h1 {
+    margin-bottom: 10px;
+  }
+
+  .menu h2 {
+    margin-bottom: 10px;
+  }
+
+  .option {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #57a3f4;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: left;
+  }
+
+  .option:hover {
+    background-color: #0056b3;
+  }
+
+  .option a{
+    color:white;
+  }
+
+  .back {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #f8f9fa; /* Light gray background */
+    border: 1px solid #6c757d; /* Dark gray border */
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: left;
+  }
+
+  .back:hover {
+    background-color: #e2e6ea; /* Light gray background on hover */
+  }
+
+  /* Styles for input fields and submit buttons */
+  input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+
+  .submitRCA  {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #76b0ee;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+  }
+
+  .submitRCA:hover {
+    background-color: #0056b3;
+  }
+
+
+  .navbar {
+    background-color: #57a3f4;
+    overflow: hidden;
+    width:100%;
+    font-family: Arial, sans-serif;
+  }
+
+  .navbar a {
+    float: right;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 20px;
+    text-decoration: none;
+  }
+
+  .navbar a:hover {
+    background-color: #0056b3;
+  }
+
+  .left-pane {
+    position: fixed;
+    top: 0;
+    left: -250px; /* Initially hidden */
+    width: 250px;
+    height: 100%;
+    background-color: #57a3f4;
+    overflow-y: auto;
+    transition: left 0.3s ease;
+    z-index: 1000;
+  }
+
+  .left-pane a {
+    display: block;
+    color: white;
+    padding: 15px;
+    text-decoration: none;
+  }
+
+  .left-pane a:hover {
+    background-color: #0056b3;
+  }
+
+  .menu-icon {
+    display: block; /* Change display property to block to make it visible */
+    position: fixed;
+    top: 13px;
+    left: 20px;
+    cursor: pointer;
+    z-index: 1001;
+  }
+
+  .menu-container:hover{
+    background-color: #0056b3;
+  }
+
+  .menu-icon div {
+    width: 35px;
+    height: 5px;
+    background-color: white;
+    margin: 5px 0;
+    transition: 0.4s;
+  }
+
+  /* Add styles for the overlay */
+  .overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+  }
+  #final {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    text-align: left; 
+    margin: auto;
+    margin-top: 250px;
+  }
+
+  #loading {
+    height: 100%; 
+    display: block; 
+    justify-content: center; 
+    align-items: center; 
+    text-align: center;
+    margin: 0;
+  }
+  #loading img {
+    max-width: 50%;
+    max-height: 50%;
+  }
+ 
+</style>
+</head>
+<body>
+
+  <div class="menu-container">
+  <!-- Three-line menu icon -->
+  <div class="menu-icon" id="menu-icon">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+</div>
+
+  <!-- Overlay for the left pane -->
+  <div class="overlay" id="overlay"></div>
+
+  <!-- Left pane -->
+  <div class="left-pane" id="left-pane">
+    <br><br><br><br>
+    <a href="/home">Home</a>
+    <a href="/SDA_digger">SDA Digger</a>
+    <a href="/DNAC_ISE">DNAC ISE</a>
+    <a href="/index">DNA Analyzer</a>
+    <a href="/transfer_files">Transfer files</a>
+  </div>
+
+  <div class="navbar">
+    <a href="/AboutDNA">About DNA Analyzer</a>
+    <a href="/service">Change Device</a>
+  </div>
+<div class="content">
+<div id="menu1" class="menu">
+  <h1>Cisco DNAC Data Analyzer</h1>
+  <h4>Note:
+    Proceed with the execution only if the DNA analyzer python file exists in the DNAC
+  </h4>
+  <button class="option"><a href="/checkfile_dna" style="text-align: center;">Check file existence</a></button>
+  {% if message=='Path exists' %}
+  <p style="align-items: center;">{{message}}</p>
+  <h2>Options</h2>
+  <button class="option" data-next="menu2" data-value="1">Debug Bundle Collector</button>
+  <button class="option" data-next="menu3" data-value="2">Log Analyzer</button>
+  <button class="option" data-next="menu4" data-value="3">Database Data Collection</button>
+  <button class="option" data-next="final" data-value="4">Database Compliance checker</button>
+  <button class="option" data-next="final" data-value="5">SDA Audit and Telemetry</button>
+  <br>
+  {% else %}
+  <h2>Options</h2>
+  <button class="option" data-next="menu2" data-value="1" disabled style="background-color: #6c757d;">Debug Bundle Collector</button>
+  <button class="option" data-next="menu3" data-value="2" disabled style="background-color: #6c757d;">Log Analyzer</button>
+  <button class="option" data-next="menu4" data-value="3" disabled style="background-color: #6c757d;">Database Data Collection</button>
+  <button class="option" data-next="final" data-value="4" disabled style="background-color: #6c757d;">Database Compliance checker</button>
+  <button class="option" data-next="final" data-value="5" disabled style="background-color: #6c757d;">SDA Audit and Telemetry</button>
+  <br>
+  <p>If the path does not exist.,move to transfer files page to send your DNA Analyzer folder to the DNAC.</p>
+  <button class="option"><a href="/transfer_files" style="text-align: center;">Transfer files from local system</a></button>
+  <button class="option"><a href="/transfer_git_dna" style="text-align: center;">Clone it from 'git' repo</a></button>
+  {% endif %}
+  
+</div>
+
+<div id="menu2" class="menu">
+  <h1>Collect Debug Bundle</h1>
+  <h2>Options</h2>
+  <button class="option" data-next="final" data-value="1">LAN Automation</button>
+  <button class="option" data-next="final" data-value="2">Provision</button>
+  <button class="back" data-prev="menu1">Back</button>
+</div>
+
+<div id="menu3" class="menu">
+  <h1>DNA Log Analyzer</h1>
+  <h2>Options</h2>
+  <button class="option" data-next="menu3.1" data-value="1">Inventory Service </button>
+  <button class="option" data-next="menu3.1" data-value="2">Spf Service Manager</button>
+  <button class="option" data-next="menu3.1" data-value="3">Network Orchestration</button>
+  <button class="option" data-next="menu3.1" data-value="4">Onboarding Service</button>
+  <button class="back" data-prev="menu1">Back</button>
+</div>
+
+<div id="menu3.1" class="menu">
+    <h1>Collect Debug Bundle</h1>
+    <h2>Options</h2>
+    <button class="option" data-next="menu3.2" data-value="1">Analysis of Existing Log File</button>
+    <button class="option" data-next="final" data-value="2">Analyze Live Log</button>
+    <button class="back" data-prev="menu3">Back</button>
+  </div>
+
+<div id="menu3.2" class="menu">
+  <h1>DNA Log Analyzer</h1>
+  <h2>Enter RCA or Log Location:</h2>
+  <input type="text" id="rcaInput" placeholder="Enter RCA or Log Location"><br>
+  <button class="submitRCA" data-next="final">Submit</button>
+  <button class="back" data-prev="menu3.1">Back</button>
+</div>
+
+<div id="menu4" class="menu">
+  <h1>Database Data Collection</h1>
+  <h2>Options</h2>
+  <button class="option" data-next="menu4.11" data-value="1">All SDA Application</button>
+  <button class="option" data-next="final" data-value="2">LAN Automation</button>
+  <button class="option" data-next="final" data-value="3">Device Provision</button>
+  <button class="option" data-next="final" data-value="4">Host Onboarding</button>
+  <button class="option" data-next="menu4.15" data-value="5">Device based Data Collection</button>
+  <button class="option" data-next="final" data-value="6">IPAM</button>
+  <button class="option" data-next="final" data-value="7">ISE</button>
+  <button class="option" data-next="menu4.18" data-value="8">Migration</button>
+  <button class="option" data-next="final" data-value="9">SSID Provisioning</button>
+  <button class="option" data-next="menu4.110" data-value="10">AP Provisioning</button>
+  <button class="back" data-prev="menu1">Back</button>
+</div>
+
+<div id="menu4.11" class="menu">
+    <h1>Database Data Collection</h1>
+    <input type="text" id="IPInput" placeholder="Enter the Device IP Address">
+    <input type="text" id="WLCInput" placeholder="Enter the WLC IP Address">
+    <input type="text" id="SSIDInput" placeholder="Enter the SSID NAME">
+    <button id="submit1" data-next="final">Submit</button>
+    <button class="back" data-prev="menu4">Back</button>
+</div>
+
+<div id="menu4.15" class="menu">
+    <h1>Database Data Collection</h1>
+    <input type="text" id="rcaInput" placeholder="Enter the Device IP Address">
+    <button class="submitRCA" data-next="final">Submit</button>
+    <button class="back" data-prev="menu4">Back</button>
+</div>
+
+<div id="menu4.18" class="menu">
+    <h1>Database Data Collection</h1>
+    <input type="text" id="rcaInput" placeholder="Enter the WLC IP Address">
+    <button class="submitRCA" data-next="final">Submit</button>
+    <button class="back" data-prev="menu4">Back</button>
+</div>
+
+<div id="menu4.110" class="menu">
+    <h1>Database Data Collection</h1>
+    <input type="text" id="rcaInput" placeholder="Enter the SSID NAME">
+    <button class="submitRCA" data-next="final">Submit</button>
+    <button class="back" data-prev="menu4">Back</button>
+</div>
+
+<div id="final" class="menu">
+  <h2>Are you sure want to submit the request?</h2>
+  <button class="option" id="submitRequest">Submit Request</button>
+  <button class="back">Back</button>
+  <div id="loading" style="display: none;">
+    <img src="/static/cisco-loading.gif" alt="Loading...">
+  </div>
+</div>
+
+</div>
+
+<script>
+  const menus = document.querySelectorAll('.menu');
+  const options = document.querySelectorAll('.option');
+  const result = document.getElementById('result');
+  let currentMenu = document.getElementById('menu1');
+  let previousMenus = []; // Stack to store previous menus
+  const chosenOptions = [];
+
+  currentMenu.style.display = 'block'; // Display the initial menu directly
+
+  options.forEach(option => {
+    option.addEventListener('click', function() {
+      const nextMenuId = option.getAttribute('data-next');
+      const optionValue = option.getAttribute('data-value');
+      if (nextMenuId) {
+        previousMenus.push(currentMenu); // Push the current menu to the stack
+        const nextMenu = document.getElementById(nextMenuId);
+        currentMenu.style.display = 'none';
+        nextMenu.style.display = 'block';
+        currentMenu = nextMenu;
+        chosenOptions.push(optionValue);
+        console.log(chosenOptions);
+        result.textContent = `Final Selection: ${chosenOptions.join(', ')}`;
+      }
+    });
+  });
+
+  function toggleMenu() {
+    const leftPane = document.getElementById('left-pane');
+    const overlay = document.getElementById('overlay');
+
+    if (leftPane.style.left === '-250px') {
+      leftPane.style.left = '0';
+      overlay.style.display = 'block';
+    } else {
+      leftPane.style.left = '-250px';
+      overlay.style.display = 'none';
+    }
+  }
+
+  function showLoading() {
+        
+        //document.getElementById('submitter').style.display = 'none';
+        document.getElementsByTagName('button').style.display = 'none';
+    }
+
+  // Event listener for the menu icon click
+  document.getElementById('menu-icon').addEventListener('click', toggleMenu);
+
+  const backButtons = document.querySelectorAll('.back');
+  backButtons.forEach(backButton => {
+    backButton.addEventListener('click', function() {
+      if (previousMenus.length > 0) { // Check if there are previous menus in the stack
+        const prevMenu = previousMenus.pop(); // Pop the last menu from the stack
+        currentMenu.style.display = 'none';
+        prevMenu.style.display = 'block';
+        currentMenu = prevMenu;
+        if (prevMenu.id === 'menu4.11') {
+          chosenOptions.pop(); // Pop the last input value
+          chosenOptions.pop(); // Pop the second input value
+          chosenOptions.pop(); // Pop the first input value
+        } else {
+          chosenOptions.pop(); // Pop one input value for other menus
+        }
+      }
+    });
+  });
+
+  const submitButton1 = document.getElementById('submit1');
+  const IPInput = document.getElementById('IPInput');
+  const WLCInput = document.getElementById('WLCInput');
+  const SSIDInput = document.getElementById('SSIDInput');
+  submitButton1.addEventListener('click', function() {
+    const IPValue = IPInput.value;
+    const WLCValue = WLCInput.value;
+    const SSIDValue = SSIDInput.value;
+    chosenOptions.push(IPValue);
+    chosenOptions.push(WLCValue);
+    chosenOptions.push(SSIDValue);
+    console.log(chosenOptions);
+    result.textContent = `Final Selection: ${chosenOptions.join(', ')}`;
+    previousMenus.push(currentMenu);
+    const nextMenuId = submitButton1.getAttribute('data-next');
+    const nextMenu = document.getElementById(nextMenuId);
+    currentMenu.style.display = 'none';
+    nextMenu.style.display = 'block';
+    currentMenu = nextMenu;
+  });
+
+  const submitButtons = document.querySelectorAll('.submitRCA');
+  submitButtons.forEach(submitButton => {
+    submitButton.addEventListener('click', function() {
+      const rcaInput = submitButton.previousElementSibling; // Get the input field associated with the button
+      const rcaValue = rcaInput.value;
+      chosenOptions.push(rcaValue);
+      console.log(chosenOptions);
+      result.textContent = `Final Selection: ${chosenOptions.join(', ')}`;
+      previousMenus.push(currentMenu);
+      const nextMenuId = submitButton.getAttribute('data-next');
+      const nextMenu = document.getElementById(nextMenuId);
+      currentMenu.style.display = 'none';
+      nextMenu.style.display = 'block';
+      currentMenu = nextMenu;
+    });
+  });
+  // Add event listener to the submit button
+  document.getElementById('submitRequest').addEventListener('click', function() {
+    // Send the chosen options to the Flask app
+    document.getElementById('loading').style.display = 'block';
+    fetch('/final_selection', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(chosenOptions)
+    })
+    .then(response => {
+      if (response.ok) {
+        return response.text();
+      } else {
+        throw new Error('Request failed.');
+      }
+    })
+    .then(data => {
+      // Redirect to result.html
+      window.location.href = '/result';
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+  });
+
+  
+</script>
+
+</body>
+</html>
